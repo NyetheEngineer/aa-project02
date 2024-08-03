@@ -1,0 +1,30 @@
+ {
+   	"item1": {
+   		"Email": {
+   			"S": "nyemitei.odjidja@azubiafrica.org"
+   		},
+   		"Name": {
+   			"S": "Nyemitei Odjidja"
+   		},
+   		"Gender": {
+   			"S": "male"
+   		},
+   		"Country": {
+   			"S": "Ghana"
+   		}
+   	},
+   	"Item2": {
+   		"Email": {
+   			"S": "jermin.amarteifio@azubiafrica.org"
+   		},
+   		"Name": {
+   			"S": "Jermin Amarteifio"
+   		},
+   		"Gender": {
+   			"S": "male"
+   		},
+   		"Country": {
+   			"S": "Ghana"
+   		}
+   	}
+   }
