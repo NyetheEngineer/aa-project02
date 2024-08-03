@@ -130,6 +130,7 @@ resource "aws_dynamodb_table_item" "dynamodb_schema_table_item" {
 5. Loading JSON Data into Terraform
 
    - Create a file named ```text data.json``` within your Terraform directory. Include some data in the format shown:
+     
    ```
         {
    	"item1": {
@@ -163,6 +164,7 @@ resource "aws_dynamodb_table_item" "dynamodb_schema_table_item" {
    }
 ``
    - Create a file named ```locals.tf``` within your Terraform directory. It will read and decode the JSON data saved in ```data.json``` into Terraform data structure.
+     
      ```
         locals {
         json_data = file("./data.json")
