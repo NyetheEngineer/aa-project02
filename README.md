@@ -170,3 +170,22 @@ resource "aws_dynamodb_table_item" "dynamodb_schema_table_item" {
          }
      ```
      
+6. Initialise Terraform
+   Run the ```terraform init command``` within your Terraform project directory to initialize the working directory and download any required plugins for your configuration.
+
+7. Preview Changes
+   Execute the ```terraform plan``` command to preview the changes Terraform will make to your AWS environment based on your configuration files. This step helps you review the planned actions before applying them.
+
+8. Apply Terraform Configuration
+   Once you've reviewed the preview and are satisfied with the changes, run the ```terraform apply``` command to create the DynamoDB table in your AWS account as defined by your Terraform configuration.
+
+# Deploying to DockerHub
+
+1. Create a Dockerfile in the app folder. 
+
+2. Build the Docker image using the following command: ```docker build -t your-dockerhub-username/docker-web-app:1.0``` .  
+
+    - This will build a Docker image with the name "your-dockerhub-username/docker-web-app" and the tag "1.0".  
+
+3. Push the Docker image to DockerHub using the following command: ```docker push your-dockerhub-username/docker-web-app:1.0```, 
+   
