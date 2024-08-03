@@ -1,105 +1,172 @@
 ## About The Project
 
-This project looks at creating a web app with the ability to add new records, send notifications on app activity and also view data from the DynamoDB. Our team was tasked to recommend 2 solutions for this app and design 1 out of the 2. For the development of this app we opted for the severless architecture.
+Simple web application utilizing dynamic data display from Amazon DynamoDB, infrastructure as code with Terraform, and containerization with Docker. This project demonstrates the integration of these technologies for user authentication, data storage, and infrastructure management.
 
 ### Collaborations
 
-This is a hand-on cloud engineering project delivered by the Azubi Africa Cloud Team(Team Agile) in 2023. After 6 months of AWS cloud training and front-end development, we got a chance to work on some realife cloud projects.
-The team members below made this project successful :
+I worked on this project with insightful contribution from the Cloud Navigators Team.
 
-1.  Joseph W Wafula [@their_linkedin]()
-2.  Kevin Rwema [@kevin-rwema](https://www.linkedin.com/in/kevin-rwema/)
-3.  Moses Boriowo [@moses-boriowo](https://www.linkedin.com/in/moses-boriowo/)
-4.  Leonard Agyenim Boateng [@their_linkedin]()
-5.  Mamadou Amadou Kebe [@mamadou-ammadou-kebe-994aa95a](https://www.linkedin.com/in/mamadou-ammadou-kebe-994aa95a/)
-6.  Iraguha Benjamin[@their_linkedin]()
-7.  Kennedy Manda [@their_linkedin]()
-8.  Michael Theuri Munyori [@michael-munyori](https://www.linkedin.com/in/michael-munyori/)
-9.  Tabitha Mutiso [@their_linkedin]()
-10. Leslie Narh [@leslienarh](https://www.linkedin.com/in/leslienarh/)
+1. Dzandu Ransford Selorm - dzandu.selorm@azubiafrica.org
+2. Jermin Amarteifio - jermin.amarteifio@azubiafrica.org
+3. Alfred Mensah - alfred.mensah@azubiafrica.org
+4. Ernest Kwabena Ofori Thompson - ernest.thompson@azubiafrica.org
+5. Allan Loyatun - allan.loyatum@azubiafrica.org
+6. Jully Achenchi - jully.achenchi@azubiafrica.org
+7. Selma Anya - selma.anya@azubiafrica.org
+8. Caesar Morris - caesar.morris@azubiafrica.org
 
 ## Technologies and tools used
 
 - Git and GitHub
-- ReactJS
-- NodeJS
-- AWS Amplify
-- AWS GrapQL
+- PHP
 - AWS Dynamo DB
-- AWS SES
+- Terraform
+- Docker and DockHub
+- AWS CLI
 
-## The Solution
+## Project Overview
+1. Create manual DynamoDB table
+2. Link the DynamoDB table to webpage
+3. Using IAC with Terraform to create DynamoDB table
+4. Containerise with Docker and push to container repository (DockerHub)
 
-<img src="serverless_arch.png" alt="serverless architecture" width="auto" height="150">
+## Prerequisites
+1. PHP development environment (e.g XAMPP, MAMP)
+2. AWS Account with IAM credentials
+3. Docker installed and running
 
-An AWS Amplify web app using React, with AWS Cognito for user management, GraphQL for the backend, and DynamoDB as the database.
+## Project Files
+```
+.
+├── app/                # application code
+│   ├── login.php       # Retrieve the values of the "username" and "password" fields from the form submission
+|   ├── style.css       # stylesheet
+│   ├── index.html      # Login page
+│   └── guestlist.php   # Fetch request from DB
+├── composer.json       # Package manager for PHP
+├── Dockerfile          # Dockerfile for building the application image
+├── README.md           # This file (documentation)
+├── vendor/             # AWS SDK for PHP application dependencies
+└── terraform/          # Terraform configuration files
+    ├── main.tf         # DynamoDB table definition
+    ├── locals.tf       # Decodes json_data into a Terraform data structure
+    ├── data.json       # DB items saved in json format
+```
+## Setting Up
 
-## Getting started
+1. Configure AWS Credentials:
 
-If you don't already have an AWS account or have the Amplify CLI installed, follow this <a href="https://docs.amplify.aws/start/getting-started/installation/q/integration/next/#install-and-configure-the-amplify-cli">guide.
-</a>
+   - Create an IAM user with appropriate permissions for DynamoDB access.
+   - Store the AWS access key and secret key securely (e.g., environment variables).
 
-The Amplify services we'll need for our backend are in the following order:
+2. Install Terraform:
 
-- Cognito: Customer identity and access management
-- AppSync: Fully managed GraphQL API
-- DynamoDB: NoSQL database
-- Lambda: FaaS/cloud function
+   - Windows: Download and install the Terraform installer from the official website (https://www.terraform.io/downloads).
 
-1. Once setup clone the repo. After cloning the repo install the dependencies.
+3. Install Application Dependencies:
 
-- `git clone git@github.com:tettehnarh/azubi_cloud_project_3.git` to clone the repo
-- `cd azubi_cloud_project_3` change directory to the cloned repo
-- `npm install` install dependencies
+   - Navigate to the app directory.
+   - Install Composer (https://getcomposer.org/).
 
-2. Install the Amplify CLI globally on your machine.
-   `npm install -g @aws-amplify/cli`
+4. Working with AWS SDK for PHP:
 
-3. Initialize your backend
-   `amplify init`
+    - Install the AWS SDK for PHP using Composer:
+      ``` 
+      composer require aws/aws-sdk-php
+      ```
+   Once the AWS SDK for PHP is installed, use it in your PHP code by including the Composer-generated autoloader: 
 
-4. Add an API
-   `amplify add api`
+      ```text
+      require 'vendor/autoload.php';
+      ```
 
-5. Setup our functio trigger
-   `amplify add function`
+## Using Terraform for DynamoDB Provisioning
+(Complete these steps after installing Terraform):
 
-```javascript:
-const aws = require("aws-sdk");
-const ses = new aws.SES();
+1. Configure AWS Credentials
+   - Prerequisites: An AWS account with appropriate permissions.
+Establish local access to your AWS account by configuring the AWS CLI using the aws configure command.
+Refer to the official AWS documentation for detailed instructions: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html
 
-exports.handler = async (event) => {
-  for (const streamedItem of event.Records) {
-    if (
-      streamedItem.eventName === "INSERT" ||
-      streamedItem.eventName === "MODIFY"
-    ) {
-      const userEmail = streamedItem.dynamodb.NewImage.userName.S;
+2. Create Terraform Project Directory
+Create a dedicated directory on your local machine to store your Terraform configuration files for this project.
 
-      await ses
-        .sendEmail({
-          Destination: {
-            ToAddresses: [userEmail],
-          },
-          Source: process.env.SES_EMAIL,
-          Message: {
-            Subject: { Data: "Welcome to Gold Grid" },
-            Body: {
-              Text: {
-                Data: "Thank you for filling out the form. Welcome to the Gold Grid family.",
-              },
-            },
-          },
-        })
-        .promise();
-    }
-  }
-  return { status: "done" };
-};
+3. Define the AWS Provider (main.tf)
+Create a file named ```text main.tf``` within your Terraform directory. This file will define the AWS provider, specifying the AWS region and credentials Terraform will use.
+
+```
+Terraform
+# Configure Terraform AWS Provider
+provider "aws" {
+  region = "us-east-1"
+}
 ```
 
-4. Setup SES
+4. Define DynamoDB Table (main.tf)
+Within the same ```text main.tf file```, define the configuration for your DynamoDB table.
 
-5. Updating our Lambda
+```text
+Terraform
+resource "aws_dynamodb_table" "GuestBook" {
+  name           = "GuestBook"
+  hash_key       = "Email" # Define your hash key attribute
+  read_capacity  = 10
+  write_capacity = 10
 
-6. Push up our backend
+  attribute {
+    name = "Email" # Define hash key attribute details
+    type = "S"  # Specify attribute data type (String in this case)
+  }
+
+  # ... Define additional attributes and settings as needed...
+resource "aws_dynamodb_table_item" "dynamodb_schema_table_item" {
+  for_each = local.tf_data
+  table_name = aws_dynamodb_table.GuestBook.name
+  hash_key   = "Email"
+  item = jsonencode(each.value)
+} 
+```
+
+5. Loading JSON Data into Terraform
+
+   - Create a file named ```text data.json``` within your Terraform directory. Include some data in the format shown:
+   ```
+        {
+   	"item1": {
+   		"Email": {
+   			"S": "nyemitei.odjidja@azubiafrica.org"
+   		},
+   		"Name": {
+   			"S": "Nyemitei Odjidja"
+   		},
+   		"Gender": {
+   			"S": "male"
+   		},
+   		"Country": {
+   			"S": "Ghana"
+   		}
+   	},
+   	"Item2": {
+   		"Email": {
+   			"S": "jermin.amarteifio@azubiafrica.org"
+   		},
+   		"Name": {
+   			"S": "Jermin Amarteifio"
+   		},
+   		"Gender": {
+   			"S": "male"
+   		},
+   		"Country": {
+   			"S": "Ghana"
+   		}
+   	}
+   }
+``
+   - Create a file named ```locals.tf``` within your Terraform directory. It will read and decode the JSON data saved in ```data.json``` into Terraform data structure.
+     ```
+        locals {
+        json_data = file("./data.json")
+        tf_data   = jsondecode(local.json_data)
+         }
+     ```
+     
